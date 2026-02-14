@@ -64,6 +64,30 @@ mkdir pixel8-kernel && cd pixel8-kernel
 
 ```
 
+사용자님의 빌드번호 **UD1A.230803**은 Pixel 8의 초기 출시 버전 (Day 1) 펌웨어입니다.
+
+이 버전에 해당하는 커널 소스 브랜치는 뒤에 -d1 (Day 1) 접미사가 붙어 있습니다. 아까 실패했던 명령어에 -d1을 붙이면 해결됩니다.
+
+🚀 해결된 명령어 (초기 버전용)
+Bash
+repo init -u https://android.googlesource.com/kernel/manifest -b android-gs-shusky-5.15-android14-d1
+(성공 후 repo sync -c -j$(nproc) 잊지 마세요!)
+
+💡 연구자(kernel-lab)를 위한 조언
+현재 사용 중인 UD1A 버전은 출시 초기 상태라 버그가 많고, 최신 보안 패치가 적용되지 않은 상태입니다.
+
+N-day 취약점 연구 목적이라면:
+그대로 진행하셔도 좋습니다. 초기 버전의 취약점을 분석하기에 딱 좋은 환경입니다.
+
+최신 익스플로잇/기능 연구 목적이라면:
+폰을 업데이트하고 커널 소스도 QPR3 (최신) 브랜치로 맞추는 것이 정신 건강에 좋습니다. 초기 버전은 빌드 시스템(Bazel) 설정이 지금과 미묘하게 달라서, 최신 가이드와 안 맞을 때가 있습니다.
+
+최신 버전 명령어 (참고용):
+
+Bash
+repo init -u https://android.googlesource.com/kernel/manifest -b android-gs-shusky-5.15-android14-qpr3
+일단은 -d1 붙인 명령어로 진행
+
 
 * **Repo 초기화 (Android 14 기준 예시):**
 ```bash
@@ -79,6 +103,8 @@ repo sync -c -j$(nproc)
 
 ```
 
+1시간 걸렸네.. ㅜㅜ
+
 
 
 #### B. 커널 빌드 (Bazel 사용)
@@ -91,6 +117,13 @@ tools/bazel build //private/google-modules/soc/gs:shiba_dist
 
 ```
 
+명령어 찾기가 어려웠네..
+```bash
+tools/bazel build \
+  --//private/google-modules/soc/gs:gs_kernel_build=//private/devices/google/shusky:zuma_shusky \
+  //private/devices/google/shusky:zuma_shusky_dist
+```
+  
 
 * `shiba`: Pixel 8
 * `husky`: Pixel 8 Pro
